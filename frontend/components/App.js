@@ -1,4 +1,6 @@
-import React from 'react'
+import React from 'react';
+import TodoList from './TodoList';
+import Form from './Form';
 
 export default class App extends React.Component {
   constructor(){
@@ -7,7 +9,7 @@ export default class App extends React.Component {
       todos: [
         {
           name: 'Organize Garage',
-          id: 1528817077286, // could look different, you could use a timestamp to generate it
+          id: 1528817077286,
           completed: false
         },
         {
@@ -16,22 +18,72 @@ export default class App extends React.Component {
           completed: false
         },
         {
-          name: 'Bake Cookies',
+          name: 'Play Video Games',
           id: 1528817084359,
+          completed: false
+        },
+        {
+          name: 'Watch Some YouTube',
+          id: 1528817084355,
           completed: false
         }
       ]
     }
   }
+
+
+
+  handleAdd = (name) =>{
+   
+    const newTodo = {
+      name: name,
+      id: Date.now(),
+      completed: false
+    }
+
+    this.setState({
+      ...this.state, todos: [...this.state.todos, newTodo]
+    })
+  }
+
+  handleToggle = (clickedId) =>{
+   
+
+    this.setState({
+      ...this.state,
+      todos: this.state.todos.map(todo=>{
+        if(todo.id === clickedId){
+          return {
+            ...todo,
+            completed: !todo.completed
+          }
+        }
+        return todo;
+      })
+    })
+  }
+
+
+  // handleHide = () =>{
+  //   this.setState({
+  //     ...this.state, 
+  //     todos: this.state.todos.map(todo=>{
+  //      if(todo.completed === true){
+  //        return{
+  //          ...todo
+  //        }
+  //      }
+  //     })
+  //   })
+  // }
+
   render() {
-    const {todos} = this.state;
+    // const {todos} = this.state;
     return (
       <div>
-        <ul>
-          {todos.map((task)=>{
-            return(<li key={task.id}>{task.name} {task.completed? <span>✅</span> : <span></span>}</li>)
-          })}
-        </ul>
+       <TodoList todos = {this.state.todos} handleToggle = {this.handleToggle}/>
+       <Form handleAdd = {this.handleAdd}/>
+       <button onClick={this.handleHide}>Hide Completed</button>
       </div>
     )
   }
